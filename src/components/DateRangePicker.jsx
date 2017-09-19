@@ -29,6 +29,8 @@ import {
   VERTICAL_ORIENTATION,
   ANCHOR_LEFT,
   ANCHOR_RIGHT,
+  OPEN_DOWN,
+  OPEN_UP,
   DAY_SIZE,
   ICON_BEFORE_POSITION,
 } from '../../constants';
@@ -67,6 +69,7 @@ const defaultProps = {
   renderMonth: null,
   orientation: HORIZONTAL_ORIENTATION,
   anchorDirection: ANCHOR_LEFT,
+  openDirection: OPEN_DOWN,
   horizontalMargin: 0,
   withPortal: false,
   withFullScreenPortal: false,
@@ -100,6 +103,7 @@ const defaultProps = {
   // internationalization
   displayFormat: () => moment.localeData().longDateFormat('L'),
   monthFormat: 'MMMM YYYY',
+  weekDayFormat: 'dd',
   phrases: DateRangePickerPhrases,
 };
 
@@ -214,12 +218,15 @@ export default class DateRangePicker extends React.Component {
       withPortal,
       withFullScreenPortal,
       anchorDirection,
+      openDirection,
       isRTL,
     } = this.props;
 
     const dayPickerClassName = cx('DateRangePicker__picker', {
       'DateRangePicker__picker--direction-left': anchorDirection === ANCHOR_LEFT,
       'DateRangePicker__picker--direction-right': anchorDirection === ANCHOR_RIGHT,
+      'DateRangePicker__picker--open-down': openDirection === OPEN_DOWN,
+      'DateRangePicker__picker--open-up': openDirection === OPEN_UP,
       'DateRangePicker__picker--horizontal': orientation === HORIZONTAL_ORIENTATION,
       'DateRangePicker__picker--vertical': orientation === VERTICAL_ORIENTATION,
       'DateRangePicker__picker--portal': withPortal || withFullScreenPortal,
@@ -352,6 +359,7 @@ export default class DateRangePicker extends React.Component {
       phrases,
       isRTL,
       showHeader,
+      weekDayFormat,
     } = this.props;
     const { dayPickerContainerStyles, isDayPickerFocused, showKeyboardShortcuts } = this.state;
 
@@ -406,6 +414,7 @@ export default class DateRangePicker extends React.Component {
           phrases={phrases}
           isRTL={isRTL}
           firstDayOfWeek={firstDayOfWeek}
+          weekDayFormat={weekDayFormat}
         />
 
         {withFullScreenPortal && (
@@ -443,6 +452,7 @@ export default class DateRangePicker extends React.Component {
       disabled,
       required,
       readOnly,
+      openDirection,
       phrases,
       isOutsideRange,
       minimumNights,
@@ -507,6 +517,7 @@ export default class DateRangePicker extends React.Component {
             disabled={disabled}
             required={required}
             readOnly={readOnly}
+            openDirection={openDirection}
             reopenPickerOnClearDates={reopenPickerOnClearDates}
             keepOpenOnDateSelect={keepOpenOnDateSelect}
             isOutsideRange={isOutsideRange}

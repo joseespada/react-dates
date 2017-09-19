@@ -28,6 +28,8 @@ import {
   VERTICAL_ORIENTATION,
   ANCHOR_LEFT,
   ANCHOR_RIGHT,
+  OPEN_DOWN,
+  OPEN_UP,
   DAY_SIZE,
   ICON_BEFORE_POSITION,
 } from '../../constants';
@@ -55,6 +57,7 @@ const defaultProps = {
   // calendar presentation and interaction related props
   orientation: HORIZONTAL_ORIENTATION,
   anchorDirection: ANCHOR_LEFT,
+  openDirection: OPEN_DOWN,
   horizontalMargin: 0,
   withPortal: false,
   withFullScreenPortal: false,
@@ -89,6 +92,7 @@ const defaultProps = {
   // internationalization props
   displayFormat: () => moment.localeData().longDateFormat('L'),
   monthFormat: 'MMMM YYYY',
+  weekDayFormat: 'dd',
   phrases: SingleDatePickerPhrases,
 };
 
@@ -220,11 +224,20 @@ export default class SingleDatePicker extends React.Component {
   }
 
   getDayPickerContainerClasses() {
-    const { orientation, withPortal, withFullScreenPortal, anchorDirection, isRTL } = this.props;
+    const {
+      orientation,
+      withPortal,
+      withFullScreenPortal,
+      anchorDirection,
+      openDirection,
+      isRTL,
+    } = this.props;
 
     const dayPickerClassName = cx('SingleDatePicker__picker', {
       'SingleDatePicker__picker--direction-left': anchorDirection === ANCHOR_LEFT,
       'SingleDatePicker__picker--direction-right': anchorDirection === ANCHOR_RIGHT,
+      'SingleDatePicker__picker--open-down': openDirection === OPEN_DOWN,
+      'SingleDatePicker__picker--open-up': openDirection === OPEN_UP,
       'SingleDatePicker__picker--horizontal': orientation === HORIZONTAL_ORIENTATION,
       'SingleDatePicker__picker--vertical': orientation === VERTICAL_ORIENTATION,
       'SingleDatePicker__picker--portal': withPortal || withFullScreenPortal,
@@ -338,6 +351,7 @@ export default class SingleDatePicker extends React.Component {
       isOutsideRange,
       isDayBlocked,
       isDayHighlighted,
+      weekDayFormat,
     } = this.props;
     const { dayPickerContainerStyles, isDayPickerFocused } = this.state;
 
@@ -379,6 +393,7 @@ export default class SingleDatePicker extends React.Component {
           isDayBlocked={isDayBlocked}
           isDayHighlighted={isDayHighlighted}
           firstDayOfWeek={firstDayOfWeek}
+          weekDayFormat={weekDayFormat}
         />
 
         {withFullScreenPortal && (
@@ -405,6 +420,7 @@ export default class SingleDatePicker extends React.Component {
       focused,
       required,
       readOnly,
+      openDirection,
       showClearDate,
       showDefaultInputIcon,
       inputIconPosition,
@@ -435,6 +451,7 @@ export default class SingleDatePicker extends React.Component {
             disabled={disabled}
             required={required}
             readOnly={readOnly}
+            openDirection={openDirection}
             showCaret={!withPortal && !withFullScreenPortal}
             onClearDate={this.clearDate}
             showClearDate={showClearDate}
