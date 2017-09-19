@@ -819,6 +819,9 @@ export default class DayPicker extends React.Component {
         className={dayPickerClassNames}
         style={dayPickerStyle}
       >
+
+      
+
         <OutsideClickHandler onOutsideClick={onOutsideClick}>
           <div
             className="DayPicker__week-headers"
@@ -884,6 +887,9 @@ export default class DayPicker extends React.Component {
 
           {renderCalendarInfo && renderCalendarInfo()}
         </OutsideClickHandler>
+        <div className="availability-txt">
+          <p>Greatest availability select the dates arrived on Saturday</p>
+        </div>
       </div>
     );
   }

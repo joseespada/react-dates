@@ -202,7 +202,7 @@ export default class DateRangePickerInputController extends React.Component {
   }
 
   getDateString(date) {
-    const displayFormat = this.getDisplayFormat();
+    const displayFormat = 'DD MMM';// this.getDisplayFormat();
     if (date && displayFormat) {
       return date && date.format(displayFormat);
     }

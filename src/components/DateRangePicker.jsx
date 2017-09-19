@@ -35,6 +35,12 @@ import {
 
 const propTypes = forbidExtraProps(DateRangePickerShape);
 
+const CloseIcon = (props) => {  
+  return (
+    <p>x</p>
+  )
+}
+
 const defaultProps = {
   // required props for a functional interactive DateRangePicker
   startDate: null,
@@ -279,6 +285,21 @@ export default class DateRangePicker extends React.Component {
     });
   }
 
+  //APARTUM
+  clearDates() {
+    this.props.onDatesChange({ startDate: null, endDate: null });
+    this.props.onFocusChange("startDate");
+  }
+
+  addDateIconColor() {
+    this.props.addDateIconColor();
+  }
+
+  removeDateIconColor() {
+    this.props.removeDateIconColor();
+  }
+  //
+
   maybeRenderDayPickerWithPortal() {
     const { withPortal, withFullScreenPortal } = this.props;
 
@@ -330,6 +351,7 @@ export default class DateRangePicker extends React.Component {
       onClose,
       phrases,
       isRTL,
+      showHeader,
     } = this.props;
     const { dayPickerContainerStyles, isDayPickerFocused, showKeyboardShortcuts } = this.state;
 
@@ -340,6 +362,8 @@ export default class DateRangePicker extends React.Component {
       initialVisibleMonth || (() => (startDate || endDate || moment()));
 
     const closeIcon = customCloseIcon || (<CloseButton />);
+    let closeButtonClass = 'DateRangePicker__close';
+    if (showHeader) closeButtonClass += ' opened';
 
     return (
       <div // eslint-disable-line jsx-a11y/no-static-element-interactions
@@ -391,7 +415,7 @@ export default class DateRangePicker extends React.Component {
             onClick={this.onOutsideClick}
             aria-label={phrases.closeDatePicker}
           >
-            <div className="DateRangePicker__close">
+            <div className={closeButtonClass}>
               {closeIcon}
             </div>
           </button>
@@ -430,15 +454,39 @@ export default class DateRangePicker extends React.Component {
       onDatesChange,
       onClose,
       isRTL,
+      showHeader,
+      showCalendar,
     } = this.props;
 
     const { isDateRangePickerInputFocused } = this.state;
 
     const onOutsideClick = (!withPortal && !withFullScreenPortal) ? this.onOutsideClick : undefined;
 
+    let startDateClass = 'date-start', 
+        endDateClass = 'date-end'
+        dateSepClass = 'date-sep';
+    if (focusedInput === START_DATE) startDateClass += ' focused';
+    if (focusedInput === END_DATE) endDateClass += ' focused';
+    if (startDate) startDateClass += ' dateSet';
+    if (endDate) endDateClass += ' dateSet';
+    if (startDate || endDate) dateSepClass += ' dateSet';
+    if (startDate && endDate) {
+      this.addDateIconColor();
+    } else this.removeDateIconColor();
+
     return (
       <div className="DateRangePicker">
         <OutsideClickHandler onOutsideClick={onOutsideClick}>
+        { showHeader ?
+          <div className="calendar-header">
+            <span className="show-dates">
+              <span className={startDateClass}>{startDate ? startDate.format('DD MMM') : 'Check in'}</span>
+              <span className={dateSepClass}>/</span>
+              <span className={endDateClass}>{endDate ? endDate.format('DD MMM') : 'Check out'}</span>
+            </span>
+            <span className="delete-dates" onClick={this.clearDates.bind(this)}>DELETE</span>
+          </div>
+        : null }
           <DateRangePickerInputController
             startDate={startDate}
             startDateId={startDateId}
@@ -472,8 +520,7 @@ export default class DateRangePicker extends React.Component {
             phrases={phrases}
             screenReaderMessage={screenReaderInputMessage}
             isFocused={isDateRangePickerInputFocused}
-            isRTL={isRTL}
-          />
+            isRTL={isRTL} />
 
           {this.maybeRenderDayPickerWithPortal()}
         </OutsideClickHandler>

@@ -182,7 +182,7 @@ export default class DateRangePickerInput extends React.Component {
     );
 
     return (
-      <div
+      <div onClick={onStartDateFocus}
         className={cx('DateRangePickerInput', {
           'DateRangePickerInput--disabled': disabled,
           'DateRangePickerInput--rtl': isRTL,
@@ -219,6 +219,7 @@ export default class DateRangePickerInput extends React.Component {
           {arrowIcon}
         </div>
 
+        {startDate || endDate || isStartDateFocused || isEndDateFocused || isFocused ?
         <DateInput
           id={endDateId}
           placeholder={endDatePlaceholderText}
@@ -238,6 +239,7 @@ export default class DateRangePickerInput extends React.Component {
           onKeyDownArrowDown={onArrowDown}
           onKeyDownQuestionMark={onQuestionMark}
         />
+        : null }
 
         {showClearDates && (
           <button

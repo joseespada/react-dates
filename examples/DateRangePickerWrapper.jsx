@@ -110,6 +110,20 @@ class DateRangePickerWrapper extends React.Component {
     this.setState({ focusedInput });
   }
 
+  addDateIconColor() {
+    //$('#checkinDiv .calendar').addClass('active');
+    //$('.DateRangePickerInput__arrow').addClass('active');
+    //$('#dateRange .custom-arrow').addClass('active');
+    console.log("hola")
+  }
+
+  removeDateIconColor() {
+    //$('#checkinDiv .calendar').removeClass('active');
+    //$('.DateRangePickerInput__arrow').removeClass('active');
+    //$('#dateRange .custom-arrow').removeClass('active');
+    console.log("adios")
+  }
+
   render() {
     const { focusedInput, startDate, endDate } = this.state;
 
@@ -132,6 +146,8 @@ class DateRangePickerWrapper extends React.Component {
           focusedInput={focusedInput}
           startDate={startDate}
           endDate={endDate}
+          addDateIconColor={this.addDateIconColor.bind(this)}
+          removeDateIconColor={this.removeDateIconColor.bind(this)}
         />
       </div>
     );
